@@ -1,12 +1,12 @@
 import { defineConfig } from "@trigger.dev/sdk";
 import { existsSync } from "node:fs";
 
-// Localmente o project ref vem do .env; no GitHub Actions vem dos secrets.
+// Carrega o .env local (no GitHub Actions ele não existe, e tudo bem).
 if (!process.env.TRIGGER_PROJECT_REF && existsSync(".env")) process.loadEnvFile(".env");
 
-// O "project ref" (proj_...) fica no .env (TRIGGER_PROJECT_REF) e no secret do GitHub.
-const project = process.env.TRIGGER_PROJECT_REF;
-if (!project) throw new Error("TRIGGER_PROJECT_REF is not set");
+// Project ref não é segredo (o painel do Trigger.dev manda colocá-lo aqui).
+// TRIGGER_PROJECT_REF no .env continua podendo sobrescrever, se um dia mudar de projeto.
+const project = process.env.TRIGGER_PROJECT_REF ?? "proj_eazbjvvlmmsolivandag";
 
 export default defineConfig({
   project,

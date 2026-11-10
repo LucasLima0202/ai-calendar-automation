@@ -1,5 +1,9 @@
 name: Deploy to Trigger.dev (prod)
 
+# Todo push na master faz deploy em produção.
+# Secret necessário (Settings → Secrets and variables → Actions → Repository secrets):
+#   TRIGGER_ACCESS_TOKEN = API key do ambiente Production com acesso "Deploy only"
+#   (cloud.trigger.dev → API keys → New API key). Um token pessoal tr_pat_ também funciona.
 on:
   push:
     branches: [master]
@@ -21,11 +25,10 @@ jobs:
 
       - name: Typecheck
         run: npm run typecheck
-        env:
-          TRIGGER_PROJECT_REF: ${{ secrets.TRIGGER_PROJECT_REF }}
 
-      - name: Deploy
-        run: npx trigger.dev@latest deploy
+      # Usa a versão do CLI fixada no package.json (a doc pede versões iguais no CI e no local).
+      # --external-id liga o deploy ao commit e evita rebuild se o workflow rodar de novo.
+      - name: 🚀 Deploy Trigger.dev
         env:
           TRIGGER_ACCESS_TOKEN: ${{ secrets.TRIGGER_ACCESS_TOKEN }}
-          TRIGGER_PROJECT_REF: ${{ secrets.TRIGGER_PROJECT_REF }}
+        run: npm run deploy -- --external-id ${{ github.sha }}

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "trigger dev",
-    "deploy": "trigger deploy",
+    "deploy": "trigger deploy --env prod",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
